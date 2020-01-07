@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.imzhiqiang.android.kv">
+
+    <application>
+        <provider
+            android:name=".KvInitializer"
+            android:authorities="${applicationId}.kv-init"
+            android:exported="false" />
+    </application>
+</manifest>

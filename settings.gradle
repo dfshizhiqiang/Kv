@@ -1,0 +1,3 @@
+rootProject.name='Kv'
+include ':app'
+include ':kv'
