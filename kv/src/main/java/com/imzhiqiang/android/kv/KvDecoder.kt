@@ -6,6 +6,8 @@ interface KvDecoder {
 
     fun getStringSet(key: String, defValues: Set<String>?): Set<String>?
 
+    fun getStringArray(key: String, defValues: Array<String?>?): Array<String?>?
+
     fun getInt(key: String, defValue: Int): Int
 
     fun getLong(key: String, defValue: Long): Long

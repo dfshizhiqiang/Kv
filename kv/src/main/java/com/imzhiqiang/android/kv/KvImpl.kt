@@ -18,6 +18,10 @@ internal class KvImpl(private val kvName: String) : Kv() {
         delegateKv.putStringSet(key, values)
     }
 
+    override fun putStringArray(key: String, values: Array<String?>?) {
+        delegateKv.putStringArray(key, values)
+    }
+
     override fun putInt(key: String, value: Int) {
         delegateKv.putInt(key, value)
     }
@@ -40,6 +44,9 @@ internal class KvImpl(private val kvName: String) : Kv() {
 
     override fun getString(key: String, defValue: String?): String? =
         delegateKv.getString(key, defValue)
+
+    override fun getStringArray(key: String, defValues: Array<String?>?): Array<String?>? =
+        delegateKv.getStringArray(key, defValues)
 
     override fun getStringSet(key: String, defValues: Set<String>?): Set<String>? =
         delegateKv.getStringSet(key, defValues)
@@ -82,6 +89,16 @@ internal class SharedPreferencesImpl(private val fileName: String) : Kv() {
         sharedPreferences.edit().putStringSet(key, values).apply()
     }
 
+    override fun putStringArray(key: String, values: Array<String?>?) {
+        val editor = sharedPreferences.edit()
+        editor.putInt(key, values?.contentHashCode() ?: 0)
+        editor.putInt("${key}_size", values?.size ?: 0)
+        values?.forEachIndexed { index, value ->
+            editor.putString("${key}_${index}", value)
+        }
+        editor.apply()
+    }
+
     override fun putInt(key: String, value: Int) {
         sharedPreferences.edit().putInt(key, value).apply()
     }
@@ -107,6 +124,15 @@ internal class SharedPreferencesImpl(private val fileName: String) : Kv() {
 
     override fun getStringSet(key: String, defValues: Set<String>?): Set<String>? =
         sharedPreferences.getStringSet(key, defValues)
+
+    override fun getStringArray(key: String, defValues: Array<String?>?): Array<String?>? {
+        val size: Int = sharedPreferences.getInt(key + "${key}_size", 0)
+        val array = arrayListOf<String?>()
+        for (index in 0 until size) {
+            array.add(sharedPreferences.getString("${key}_${index}", null))
+        }
+        return array.toTypedArray()
+    }
 
     override fun getInt(key: String, defValue: Int): Int = sharedPreferences.getInt(key, defValue)
 

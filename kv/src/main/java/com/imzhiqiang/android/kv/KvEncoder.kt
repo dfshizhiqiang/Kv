@@ -6,6 +6,8 @@ interface KvEncoder {
 
     fun putStringSet(key: String, values: Set<String>?)
 
+    fun putStringArray(key: String, values: Array<String?>?)
+
     fun putInt(key: String, value: Int)
 
     fun putLong(key: String, value: Long)

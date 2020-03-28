@@ -64,6 +64,9 @@ fun Kv.getStringLiveData(key: String, defValue: String?): LiveData<String?> =
 fun Kv.getStringSetLiveData(key: String, defValue: Set<String>?): LiveData<Set<String>?> =
     KvStringSetLiveData(this, key, defValue)
 
+fun Kv.getStringArrayLiveData(key: String, defValue: Array<String?>?): LiveData<Array<String?>?> =
+    KvStringArrayLiveData(this, key, defValue)
+
 fun Kv.getIntLiveData(key: String, defValue: Int): LiveData<Int> =
     KvIntLiveData(this, key, defValue)
 

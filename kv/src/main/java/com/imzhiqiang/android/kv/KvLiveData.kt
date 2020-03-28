@@ -42,6 +42,13 @@ class KvStringSetLiveData(kv: Kv, key: String, defValue: Set<String>?) :
         kv.getStringSet(key, defValue)
 }
 
+class KvStringArrayLiveData(kv: Kv, key: String, defValue: Array<String?>?) :
+    KvLiveData<Array<String?>?>(kv, key, defValue) {
+
+    override fun getValueFromKv(key: String, defValue: Array<String?>?): Array<String?>? =
+        kv.getStringArray(key, defValue)
+}
+
 class KvIntLiveData(kv: Kv, key: String, defValue: Int) :
     KvLiveData<Int>(kv, key, defValue) {
 
