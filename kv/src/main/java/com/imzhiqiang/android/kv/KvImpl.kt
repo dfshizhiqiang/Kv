@@ -116,7 +116,17 @@ internal class SharedPreferencesImpl(private val fileName: String) : Kv() {
     }
 
     override fun remove(key: String) {
-        sharedPreferences.edit().remove(key).apply()
+        val editor = sharedPreferences.edit()
+        editor.remove(key)
+        val hasStringArrayKey = sharedPreferences.contains("${key}_size")
+        if (hasStringArrayKey) {
+            val size: Int = sharedPreferences.getInt("${key}_size", 0)
+            editor.remove("${key}_size")
+            for (index in 0 until size) {
+                editor.remove("${key}_${index}")
+            }
+        }
+        editor.apply()
     }
 
     override fun getString(key: String, defValue: String?): String? =
@@ -126,7 +136,7 @@ internal class SharedPreferencesImpl(private val fileName: String) : Kv() {
         sharedPreferences.getStringSet(key, defValues)
 
     override fun getStringArray(key: String, defValues: Array<String?>?): Array<String?>? {
-        val size: Int = sharedPreferences.getInt(key + "${key}_size", 0)
+        val size: Int = sharedPreferences.getInt("${key}_size", 0)
         val array = arrayListOf<String?>()
         for (index in 0 until size) {
             array.add(sharedPreferences.getString("${key}_${index}", null))
