@@ -90,7 +90,14 @@ internal class SharedPreferencesImpl(private val fileName: String) : Kv() {
     }
 
     override fun putStringArray(key: String, values: Array<String?>?) {
+        val oldSize = sharedPreferences.getInt("${key}_size", 0)
+        val newSize = values?.size ?: 0
         val editor = sharedPreferences.edit()
+        if (newSize < oldSize) {
+            for (index in newSize until oldSize) {
+                editor.remove("${key}_${index}")
+            }
+        }
         editor.putInt(key, values?.contentHashCode() ?: 0)
         editor.putInt("${key}_size", values?.size ?: 0)
         values?.forEachIndexed { index, value ->
